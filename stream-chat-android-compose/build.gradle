@@ -1,0 +1,94 @@
+import io.getstream.chat.android.Configuration
+import io.getstream.chat.android.Dependencies
+import io.getstream.chat.android.Versions
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: "de.mannodermaus.android-junit5"
+
+ext {
+    PUBLISH_GROUP_ID = Configuration.artifactGroup
+    PUBLISH_ARTIFACT_ID = 'stream-chat-android-compose'
+    PUBLISH_VERSION = rootVersionName
+}
+
+apply from: "${rootDir}/scripts/publish-module.gradle"
+apply from: "${rootDir}/scripts/android.gradle"
+apply from: "${rootDir}/scripts/detekt-compose.gradle"
+
+android {
+    defaultConfig {
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    resourcePrefix 'stream_compose_'
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion Versions.ANDROIDX_COMPOSE_COMPILER
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs += [
+                '-progressive',
+                '-Xexplicit-api=strict',
+                '-opt-in=io.getstream.chat.android.core.internal.InternalStreamChatApi',
+                '-opt-in=io.getstream.chat.android.core.ExperimentalStreamChatApi',
+                '-opt-in=kotlin.RequiresOptIn',
+        ]
+    }
+}
+
+dependencies {
+    api project(':stream-chat-android-ui-common')
+    implementation project(":stream-chat-android-ui-utils")
+
+    implementation Dependencies.androidxAppCompat
+    implementation Dependencies.streamLog
+
+    // Compose
+    implementation Dependencies.composeCompiler
+    implementation Dependencies.composeUi
+    implementation Dependencies.composeUiTooling
+    implementation Dependencies.composeFoundation
+    implementation Dependencies.composeMaterial
+
+    implementation Dependencies.composeActivity
+    implementation Dependencies.composeViewModel
+    implementation Dependencies.composeAccompanistPermissions
+    implementation Dependencies.composeAccompanistPager
+    implementation Dependencies.composeAccompanistSystemUiController
+
+    // Coil
+    implementation Dependencies.composeCoil
+    implementation Dependencies.coilGif
+    implementation Dependencies.coilVideo
+
+    // Tests
+    testImplementation project(':stream-chat-android-test')
+    testImplementation testFixtures(project(":stream-chat-android-core"))
+    testImplementation Dependencies.junitJupiterApi
+    testImplementation Dependencies.junitJupiterParams
+    testRuntimeOnly Dependencies.junitJupiterEngine
+    testRuntimeOnly Dependencies.junitVintageEngine
+
+    testImplementation Dependencies.kluent
+    testImplementation Dependencies.mockito
+    testImplementation Dependencies.mockitoKotlin
+
+    detektPlugins(Dependencies.detektFormatting)
+}
