@@ -154,11 +154,6 @@ public class MessageComposerViewModel(
     public fun addSelectedAttachments(attachments: List<Attachment>): Unit =
         messageComposerController.addSelectedAttachments(attachments)
 
-    public fun addLocationAttachment() {
-        // val location = LatLng
-        return messageComposerController.sendLocationMessage(23.1231231,12.1231312)
-    }
-
     /**
      * Removes a selected attachment from the list, when the user taps on the cancel/delete button.
      *
