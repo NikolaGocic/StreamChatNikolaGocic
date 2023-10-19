@@ -26,11 +26,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,9 +42,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.location.FusedLocationProviderClient
 import io.getstream.chat.android.compose.R
 import io.getstream.chat.android.compose.ui.channels.header.ChannelListHeader
 import io.getstream.chat.android.compose.ui.channels.info.SelectedChannelMenu
@@ -114,7 +118,13 @@ public fun ChannelsScreen(
             topBar = {
                 if (isShowingHeader) {
                     ChannelListHeader(
-                        onHeaderActionClick = onHeaderActionClick,
+                        onHeaderActionClick = {
+                            if (selectedChannel != null) {
+                                listViewModel.selectChannel(null)
+                            } else {
+                                onBackPressed()
+                            }
+                        },
                         onAvatarClick = { onHeaderAvatarClick() },
                         currentUser = user,
                         title = title,
@@ -122,7 +132,7 @@ public fun ChannelsScreen(
                     )
                 }
             },
-        ) {
+        ) { it ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -162,6 +172,11 @@ public fun ChannelsScreen(
             SelectedChannelMenu(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
+                    .border(
+                        width = 1.dp,
+                        color = Color(0xFF9C9497).copy(0.2f),
+                        shape = RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp)
+                    )
                     .animateEnterExit(
                         enter = slideInVertically(
                             initialOffsetY = { height -> height },

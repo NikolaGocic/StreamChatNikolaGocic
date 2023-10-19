@@ -47,6 +47,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import io.getstream.chat.android.compose.sample.ChatApp
 import io.getstream.chat.android.compose.sample.R
 import io.getstream.chat.android.compose.state.mediagallerypreview.MediaGalleryPreviewResultType
@@ -96,9 +98,14 @@ class MessagesActivity : BaseConnectedActivity() {
     private val attachmentsPickerViewModel by viewModels<AttachmentsPickerViewModel>(factoryProducer = { factory })
     private val composerViewModel by viewModels<MessageComposerViewModel>(factoryProducer = { factory })
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        
         setContent {
             ChatTheme(
                 dateFormatter = ChatApp.dateFormatter
@@ -108,7 +115,8 @@ class MessagesActivity : BaseConnectedActivity() {
                     onBackPressed = { finish() },
                     onHeaderTitleClick = {},
                     // TODO
-                    statefulStreamMediaRecorder = statefulStreamMediaRecorder
+                    statefulStreamMediaRecorder = statefulStreamMediaRecorder,
+                    fusedLocationClient = fusedLocationClient
                 )
 
                  //MyCustomUi()

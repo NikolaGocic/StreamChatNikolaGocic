@@ -144,9 +144,7 @@ public fun CustomInputField(
                     )
                 },
                 onClick = {
-                    scope.launch {
-                        focusRequester.requestFocus()
-                    }
+
                 },
             )
         }

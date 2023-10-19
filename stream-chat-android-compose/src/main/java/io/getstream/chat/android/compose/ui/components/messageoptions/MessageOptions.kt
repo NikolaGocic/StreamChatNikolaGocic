@@ -150,7 +150,7 @@ public fun defaultMessageOptionsState(
                 iconPainter = painterResource(R.drawable.stream_compose_ic_resend),
                 action = Resend(selectedMessage),
                 titleColor = ChatTheme.colors.textHighEmphasis,
-                iconColor = ChatTheme.colors.textLowEmphasis,
+                iconColor = ChatTheme.colors.textHighEmphasis,
             )
         } else {
             null
@@ -161,18 +161,7 @@ public fun defaultMessageOptionsState(
                 iconPainter = painterResource(R.drawable.stream_compose_ic_reply),
                 action = Reply(selectedMessage),
                 titleColor = ChatTheme.colors.textHighEmphasis,
-                iconColor = ChatTheme.colors.textLowEmphasis,
-            )
-        } else {
-            null
-        },
-        if (!isInThread && isMessageSynced && canThreadReply) {
-            MessageOptionItemState(
-                title = R.string.stream_compose_thread_reply,
-                iconPainter = painterResource(R.drawable.stream_compose_ic_thread),
-                action = ThreadReply(selectedMessage),
-                titleColor = ChatTheme.colors.textHighEmphasis,
-                iconColor = ChatTheme.colors.textLowEmphasis,
+                iconColor = ChatTheme.colors.textHighEmphasis,
             )
         } else {
             null
@@ -183,7 +172,7 @@ public fun defaultMessageOptionsState(
                 iconPainter = painterResource(R.drawable.stream_compose_ic_copy),
                 action = Copy(selectedMessage),
                 titleColor = ChatTheme.colors.textHighEmphasis,
-                iconColor = ChatTheme.colors.textLowEmphasis,
+                iconColor = ChatTheme.colors.textHighEmphasis,
             )
         } else {
             null
@@ -194,7 +183,7 @@ public fun defaultMessageOptionsState(
                 iconPainter = painterResource(R.drawable.stream_compose_ic_edit),
                 action = Edit(selectedMessage),
                 titleColor = ChatTheme.colors.textHighEmphasis,
-                iconColor = ChatTheme.colors.textLowEmphasis,
+                iconColor = ChatTheme.colors.textHighEmphasis,
             )
         } else {
             null
@@ -205,7 +194,7 @@ public fun defaultMessageOptionsState(
                 iconPainter = painterResource(R.drawable.stream_compose_ic_flag),
                 action = Flag(selectedMessage),
                 titleColor = ChatTheme.colors.textHighEmphasis,
-                iconColor = ChatTheme.colors.textLowEmphasis,
+                iconColor = ChatTheme.colors.textHighEmphasis,
             )
         } else {
             null
@@ -215,7 +204,7 @@ public fun defaultMessageOptionsState(
                 title = if (selectedMessage.pinned) R.string.stream_compose_unpin_message else R.string.stream_compose_pin_message,
                 action = Pin(selectedMessage),
                 iconPainter = painterResource(id = if (selectedMessage.pinned) R.drawable.stream_compose_ic_unpin_message else R.drawable.stream_compose_ic_pin_message),
-                iconColor = ChatTheme.colors.textLowEmphasis,
+                iconColor = ChatTheme.colors.textHighEmphasis,
                 titleColor = ChatTheme.colors.textHighEmphasis,
             )
         } else {

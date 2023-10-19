@@ -18,10 +18,12 @@ package io.getstream.chat.android.compose.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import io.getstream.chat.android.compose.R
 
 /**
  * Contains all the typography we provide for our components.
@@ -64,7 +66,7 @@ public data class StreamTypography(
          * @param fontFamily The font that the users want to use for the app.
          * @return [StreamTypography] that holds all the default text styles that we support.
          */
-        public fun defaultTypography(fontFamily: FontFamily? = null): StreamTypography = StreamTypography(
+        public fun defaultTypography(fontFamily: FontFamily? = FontFamily(Font(R.font.monteserrat))): StreamTypography = StreamTypography(
             title1 = TextStyle(
                 fontSize = 24.sp,
                 lineHeight = 34.sp,

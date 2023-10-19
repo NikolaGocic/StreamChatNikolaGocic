@@ -26,6 +26,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -61,7 +62,7 @@ public fun EmptyContent(
         Text(
             text = text,
             style = ChatTheme.typography.title3,
-            color = ChatTheme.colors.textLowEmphasis,
+            color = Color.White,
             textAlign = TextAlign.Center,
         )
     }

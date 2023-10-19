@@ -112,30 +112,30 @@ public fun buildDefaultChannelOptionsState(
     val canDeleteChannel = ownCapabilities.contains(ChannelCapabilities.DELETE_CHANNEL)
 
     return listOfNotNull(
-        ChannelOptionState(
-            title = stringResource(id = R.string.stream_compose_selected_channel_menu_view_info),
-            titleColor = ChatTheme.colors.textHighEmphasis,
-            iconPainter = painterResource(id = R.drawable.stream_compose_ic_person),
-            iconColor = ChatTheme.colors.textLowEmphasis,
-            action = ViewInfo(selectedChannel),
-        ),
-        if (canLeaveChannel) {
-            ChannelOptionState(
-                title = stringResource(id = R.string.stream_compose_selected_channel_menu_leave_group),
-                titleColor = ChatTheme.colors.textHighEmphasis,
-                iconPainter = painterResource(id = R.drawable.stream_compose_ic_person_remove),
-                iconColor = ChatTheme.colors.textLowEmphasis,
-                action = LeaveGroup(selectedChannel),
-            )
-        } else {
-            null
-        },
+        // ChannelOptionState(
+        //     title = stringResource(id = R.string.stream_compose_selected_channel_menu_view_info),
+        //     titleColor = ChatTheme.colors.textHighEmphasis,
+        //     iconPainter = painterResource(id = R.drawable.stream_compose_ic_person),
+        //     iconColor = ChatTheme.colors.textLowEmphasis,
+        //     action = ViewInfo(selectedChannel),
+        // ),
+        // if (canLeaveChannel) {
+        //     ChannelOptionState(
+        //         title = stringResource(id = R.string.stream_compose_selected_channel_menu_leave_group),
+        //         titleColor = ChatTheme.colors.textHighEmphasis,
+        //         iconPainter = painterResource(id = R.drawable.stream_compose_ic_person_remove),
+        //         iconColor = ChatTheme.colors.textLowEmphasis,
+        //         action = LeaveGroup(selectedChannel),
+        //     )
+        // } else {
+        //     null
+        // },
         if (isMuted) {
             ChannelOptionState(
                 title = stringResource(id = R.string.stream_compose_selected_channel_menu_unmute_channel),
                 titleColor = ChatTheme.colors.textHighEmphasis,
                 iconPainter = painterResource(id = R.drawable.stream_compose_ic_unmute),
-                iconColor = ChatTheme.colors.textLowEmphasis,
+                iconColor = ChatTheme.colors.textHighEmphasis,
                 action = UnmuteChannel(selectedChannel),
             )
         } else {
@@ -143,7 +143,7 @@ public fun buildDefaultChannelOptionsState(
                 title = stringResource(id = R.string.stream_compose_selected_channel_menu_mute_channel),
                 titleColor = ChatTheme.colors.textHighEmphasis,
                 iconPainter = painterResource(id = R.drawable.stream_compose_ic_mute),
-                iconColor = ChatTheme.colors.textLowEmphasis,
+                iconColor = ChatTheme.colors.textHighEmphasis,
                 action = MuteChannel(selectedChannel),
             )
         },
@@ -162,7 +162,7 @@ public fun buildDefaultChannelOptionsState(
             title = stringResource(id = R.string.stream_compose_selected_channel_menu_dismiss),
             titleColor = ChatTheme.colors.textHighEmphasis,
             iconPainter = painterResource(id = R.drawable.stream_compose_ic_clear),
-            iconColor = ChatTheme.colors.textLowEmphasis,
+            iconColor = ChatTheme.colors.textHighEmphasis,
             action = Cancel,
         ),
     )

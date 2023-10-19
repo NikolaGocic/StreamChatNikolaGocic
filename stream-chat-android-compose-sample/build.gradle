@@ -116,6 +116,7 @@ dependencies {
     // Firebase
     implementation Dependencies.firebaseAnalytics
     implementation Dependencies.firebaseCrashlytics
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
     detektPlugins(Dependencies.detektFormatting)
 }

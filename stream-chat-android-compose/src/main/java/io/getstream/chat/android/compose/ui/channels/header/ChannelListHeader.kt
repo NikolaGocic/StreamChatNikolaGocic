@@ -17,6 +17,7 @@
 package io.getstream.chat.android.compose.ui.channels.header
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -42,6 +44,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.getstream.chat.android.compose.R
 import io.getstream.chat.android.compose.previewdata.PreviewUserData
+import io.getstream.chat.android.compose.ui.components.BackButton
 import io.getstream.chat.android.compose.ui.components.NetworkLoadingIndicator
 import io.getstream.chat.android.compose.ui.components.avatar.UserAvatar
 import io.getstream.chat.android.compose.ui.theme.ChatTheme
@@ -81,9 +84,12 @@ public fun ChannelListHeader(
     onAvatarClick: (User?) -> Unit = {},
     onHeaderActionClick: () -> Unit = {},
     leadingContent: @Composable RowScope.() -> Unit = {
-        DefaultChannelHeaderLeadingContent(
-            currentUser = currentUser,
-            onAvatarClick = onAvatarClick,
+        // DefaultChannelHeaderLeadingContent(
+        //     currentUser = currentUser,
+        //     onAvatarClick = onAvatarClick,
+        // )
+        CustomChannelHeaderLeadingContent(
+            onBackPressed = onHeaderActionClick
         )
     },
     centerContent: @Composable RowScope.() -> Unit = {
@@ -93,9 +99,10 @@ public fun ChannelListHeader(
         )
     },
     trailingContent: @Composable RowScope.() -> Unit = {
-        DefaultChannelListHeaderTrailingContent(
-            onHeaderActionClick = onHeaderActionClick,
-        )
+        Spacer(modifier = Modifier.size(40.dp))
+        // DefaultChannelListHeaderTrailingContent(
+        //     onHeaderActionClick = onHeaderActionClick,
+        // )
     },
 ) {
     Surface(
@@ -105,18 +112,26 @@ public fun ChannelListHeader(
         color = color,
         shape = shape,
     ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            leadingContent()
+        Column {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                leadingContent()
 
-            centerContent()
+                centerContent()
 
-            trailingContent()
+                trailingContent()
+            }
+            Divider(
+                color = Color(0xFF9C9497).copy(0.2f),
+                thickness = 1.dp
+            )
+
         }
+
     }
 }
 
@@ -145,6 +160,19 @@ internal fun DefaultChannelHeaderLeadingContent(
     }
 }
 
+@Composable
+internal fun CustomChannelHeaderLeadingContent(
+    onBackPressed: () -> Unit,
+) {
+    val size = Modifier.size(40.dp)
+    BackButton(
+        modifier = size,
+        painter = painterResource(id = R.drawable.back_button),
+        onBackPressed = onBackPressed,
+        color = Color.White
+    )
+}
+
 /**
  * Represents the channel header's center slot. It either shows a [Text] if [connectionState] is
  * [ConnectionState.CONNECTED], or a [NetworkLoadingIndicator] if there is no connections.
@@ -157,33 +185,16 @@ internal fun RowScope.DefaultChannelListHeaderCenterContent(
     connectionState: ConnectionState,
     title: String,
 ) {
-    when (connectionState) {
-        is ConnectionState.Connected -> {
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentWidth()
-                    .padding(horizontal = 16.dp),
-                text = title,
-                style = ChatTheme.typography.title3Bold,
-                maxLines = 1,
-                color = ChatTheme.colors.textHighEmphasis,
-            )
-        }
-        is ConnectionState.Connecting -> NetworkLoadingIndicator(modifier = Modifier.weight(1f))
-        is ConnectionState.Offline -> {
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentWidth()
-                    .padding(horizontal = 16.dp),
-                text = stringResource(R.string.stream_compose_disconnected),
-                style = ChatTheme.typography.title3Bold,
-                maxLines = 1,
-                color = ChatTheme.colors.textHighEmphasis,
-            )
-        }
-    }
+    Text(
+        modifier = Modifier
+            .weight(1f)
+            .wrapContentWidth()
+            .padding(horizontal = 16.dp),
+        text = title,
+        style = ChatTheme.typography.title3Bold,
+        maxLines = 1,
+        color = Color.White,
+    )
 }
 
 /**
@@ -212,6 +223,8 @@ internal fun DefaultChannelListHeaderTrailingContent(
         )
     }
 }
+
+
 
 /**
  * Preview of [ChannelListHeader] for the client that is connected to the WS.

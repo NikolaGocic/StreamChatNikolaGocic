@@ -49,6 +49,7 @@ import io.getstream.log.Priority
 import io.getstream.log.StreamLog
 import io.getstream.log.streamLog
 import io.getstream.sdk.chat.audio.recording.MediaRecorderState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -91,6 +92,7 @@ internal fun CustomMessageComposerTrailingContent(
     onSendMessage: (String, List<Attachment>) -> Unit,
     onRecordingSaved: (Attachment) -> Unit,
     onSmileyCLick: () -> Unit = {},
+    shareLocation: () -> Unit = {},
     statefulStreamMediaRecorder: StatefulStreamMediaRecorder?,
 ) {
     val isSendButtonEnabled = ownCapabilities.contains(ChannelCapabilities.SEND_MESSAGE)
@@ -115,6 +117,15 @@ internal fun CustomMessageComposerTrailingContent(
         },
     ) {
         // TODO should we track this or always ask?
+        permissionsRequested = true
+    }
+
+    // TODO test permissions on lower APIs etc
+    val locationPermissionState = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        ),
+    ) {
         permissionsRequested = true
     }
     val coroutineScope = rememberCoroutineScope()
@@ -144,10 +155,15 @@ internal fun CustomMessageComposerTrailingContent(
             // )
 
             Icon(
-                modifier = Modifier,
+                modifier = Modifier.clickable {
+                    if(!locationPermissionState.allPermissionsGranted) {
+                        locationPermissionState.launchMultiplePermissionRequest()
+                    } else {
+                        shareLocation.invoke()
+                    }
+                },
                 painter = painterResource(id = R.drawable.location_share),
-                contentDescription = stringResource(id = R.string.stream_compose_record_audio_message),
-                // TODO disable if max attachments are reached
+                contentDescription = "location_share",
                 tint = Color.White,
             )
 
@@ -165,6 +181,31 @@ internal fun CustomMessageComposerTrailingContent(
                             .size(32.dp)
                             .pointerInput(Unit) {
                                 detectTapGestures(
+                                    onTap = {
+                                        if(!storageAndRecordingPermissionState.allPermissionsGranted) {
+                                            storageAndRecordingPermissionState.launchMultiplePermissionRequest()
+                                        } else {
+                                            coroutineScope.launch {
+                                                statefulStreamMediaRecorder.startAudioRecording(
+                                                    context = context,
+                                                    recordingName = "audio_recording_${Date()}",
+                                                )
+                                                delay(1000)
+                                                statefulStreamMediaRecorder.stopRecording()
+                                                    .onSuccess {
+                                                        StreamLog.i("MessageComposer") {
+                                                            "[onRecordingSaved] attachment: $it"
+                                                        }
+                                                        onRecordingSaved(it.attachment)
+                                                    }
+                                                    .onError {
+                                                        streamLog(throwable = it.extractCause()) {
+                                                            "Could not save audio recording: ${it.message}"
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                    },
                                     onLongPress = {
                                         /**
                                          * An internal function used to handle audio recording. It initiates the recording

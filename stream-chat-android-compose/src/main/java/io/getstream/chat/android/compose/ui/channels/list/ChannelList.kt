@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -272,7 +273,7 @@ internal fun DefaultChannelListEmptyContent(modifier: Modifier = Modifier) {
 @Composable
 internal fun DefaultChannelSearchEmptyContent(
     searchQuery: String,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.background(Color.Black),
 ) {
     EmptyContent(
         modifier = modifier,

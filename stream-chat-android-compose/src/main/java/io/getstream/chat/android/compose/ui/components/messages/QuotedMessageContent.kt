@@ -16,6 +16,7 @@
 
 package io.getstream.chat.android.compose.ui.components.messages
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -66,10 +67,19 @@ public fun QuotedMessageContent(
         Color.Black
     }
 
+    val messageBorderColor = if (replyMessage?.isMine(currentUser) != false) {
+        Color.Black
+    } else {
+        Color(0xFF9C9497).copy(0.2f)
+    }
+
+
+
     MessageBubble(
         modifier = modifier,
         shape = messageBubbleShape,
         color = messageBubbleColor,
+        border = BorderStroke(1.dp, messageBorderColor),
         content = {
             Row {
                 attachmentContent(message)

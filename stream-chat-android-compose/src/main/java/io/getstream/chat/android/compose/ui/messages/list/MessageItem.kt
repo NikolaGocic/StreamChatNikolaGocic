@@ -509,7 +509,7 @@ internal fun RegularMessageContent(
         message.isGiphyEphemeral() -> ChatTheme.colors.giphyMessageBackground
         message.isDeleted() -> when (ownsMessage) {
             true -> ChatTheme.ownMessageTheme.deletedBackgroundColor
-            else -> ChatTheme.otherMessageTheme.deletedBackgroundColor
+            else -> Color.Black
         }
         else -> when (ownsMessage) {
             true -> Color.White

@@ -17,6 +17,7 @@
 package io.getstream.chat.android.compose.ui.util
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -174,15 +175,27 @@ private class DefaultMessagePreviewFormatter(
         attachmentTextStyle: TextStyle,
     ) {
         if (attachments.isNotEmpty()) {
+
+            attachments
             attachmentFactories
                 .firstOrNull { it.canHandle(attachments) }
                 ?.textFormatter
                 ?.let { textFormatter ->
                     attachments.mapNotNull { attachment ->
-                        textFormatter.invoke(attachment)
-                            .let { previewText ->
-                                previewText.ifEmpty { null }
+                        Log.d("NIKOLA", attachment.type.toString())
+                        when(attachment.type){
+                            "voiceRecording" ->  "Voice received"
+                            "image" ->  "Media received"
+                            "video" ->  "Media received"
+                            "file" -> "File received"
+                            "location" -> "Location received"
+                            else -> {
+                                textFormatter.invoke(attachment)
+                                    .let { previewText ->
+                                        previewText.ifEmpty { null }
+                                    }
                             }
+                        }
                     }.joinToString()
                 }?.let { attachmentText ->
                     val startIndex = this.length

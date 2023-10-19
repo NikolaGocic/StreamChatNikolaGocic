@@ -16,7 +16,12 @@
 
 package io.getstream.chat.android.compose.viewmodel.messages
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import io.getstream.chat.android.models.Attachment
 import io.getstream.chat.android.models.ChannelCapabilities
 import io.getstream.chat.android.models.Command
@@ -56,6 +61,8 @@ public class MessageComposerViewModel(
      * UI state of the current composer input.
      */
     public val input: MutableStateFlow<String> = messageComposerController.input
+
+    public val fusedLocationProviderClient: MutableStateFlow<FusedLocationProviderClient?> = MutableStateFlow(null)
 
     /**
      * If the message will be shown in the channel after it is sent.
@@ -189,6 +196,18 @@ public class MessageComposerViewModel(
         message: String,
         attachments: List<Attachment> = emptyList(),
     ): Message = messageComposerController.buildNewMessage(message, attachments)
+
+
+    public fun setFusedLocationClient(client: FusedLocationProviderClient){
+        fusedLocationProviderClient.value = client
+    }
+    public fun getFusedLocationClient(): FusedLocationProviderClient? {
+        return fusedLocationProviderClient.value
+    }
+    public fun buildShareLocationMessage(lat: Double, long: Double): Message {
+
+        return buildNewMessage("Latitude: $lat Longitude: $long")
+    }
 
     /**
      * Updates the UI state when leaving the thread, to switch back to the [MessageMode.Normal] message mode, by

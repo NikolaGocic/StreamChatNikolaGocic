@@ -25,7 +25,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -35,6 +37,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -46,11 +49,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.location.FusedLocationProviderClient
 import io.getstream.chat.android.compose.R
 import io.getstream.chat.android.compose.state.mediagallerypreview.MediaGalleryPreviewResultType
 import io.getstream.chat.android.compose.state.messageoptions.MessageOptionItemState
@@ -123,6 +128,7 @@ public fun MessagesScreen(
     skipEnrichUrl: Boolean = false,
     threadMessagesStart: ThreadMessagesStart = ThreadMessagesStart.BOTTOM,
     statefulStreamMediaRecorder: StatefulStreamMediaRecorder? = null,
+    fusedLocationClient: FusedLocationProviderClient? = null
 ) {
     val listViewModel = viewModel(MessageListViewModel::class.java, factory = viewModelFactory)
     val composerViewModel = viewModel(MessageComposerViewModel::class.java, factory = viewModelFactory)
@@ -133,6 +139,10 @@ public fun MessagesScreen(
 
     if (messageMode is MessageMode.MessageThread) {
         composerViewModel.setMessageMode(messageMode)
+    }
+
+    if(fusedLocationClient != null){
+        composerViewModel.setFusedLocationClient(fusedLocationClient)
     }
 
     val backAction = {
@@ -369,6 +379,11 @@ private fun BoxScope.MessagesScreenMenus(
         SelectedMessageMenu(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFF9C9497).copy(0.2f),
+                    shape = RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp)
+                )
                 .animateEnterExit(
                     enter = slideInVertically(
                         initialOffsetY = { height -> height },

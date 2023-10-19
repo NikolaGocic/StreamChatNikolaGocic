@@ -45,6 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.compose.sample.ChatApp
 import io.getstream.chat.android.compose.sample.ChatHelper
@@ -91,11 +93,16 @@ class ChannelsActivity : BaseConnectedActivity() {
             ChatTheme(dateFormatter = ChatApp.dateFormatter) {
                 ChannelsScreen(
                     viewModelFactory = factory,
-                    title = stringResource(id = R.string.app_name),
+                    title = "Inbox",
                     isShowingHeader = true,
-                    isShowingSearch = true,
+                    isShowingSearch = false,
                     onItemClick = ::openMessages,
-                    onBackPressed = ::finish,
+                    onBackPressed = {
+                        listViewModel.viewModelScope.launch {
+                            ChatHelper.disconnectUser()
+                            openUserLogin()
+                        }
+                    },
                     onHeaderAvatarClick = {
                         listViewModel.viewModelScope.launch {
                             ChatHelper.disconnectUser()
@@ -128,7 +135,7 @@ class ChannelsActivity : BaseConnectedActivity() {
                     connectionState = connectionState,
                 )
             },
-        ) {
+        ) { it ->
             ChannelList(
                 modifier = Modifier.fillMaxSize(),
                 itemContent = {

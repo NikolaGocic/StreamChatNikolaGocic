@@ -72,8 +72,6 @@ public fun MessageInput(
     val (value, attachments, activeAction) = messageComposerState
     val canSendMessage = messageComposerState.ownCapabilities.contains(ChannelCapabilities.SEND_MESSAGE)
 
-
-
     CustomInputField(
         modifier = modifier,
         value = value,

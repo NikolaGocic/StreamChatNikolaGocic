@@ -130,15 +130,15 @@ internal fun DefaultSelectedChannelMenuHeaderContent(
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
     )
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        text = selectedChannel.getMembersStatusText(LocalContext.current, currentUser),
-        style = ChatTheme.typography.footnoteBold,
-        color = ChatTheme.colors.textLowEmphasis,
-    )
-
-    ChannelMembers(membersToDisplay)
+    // Text(
+    //     modifier = Modifier.fillMaxWidth(),
+    //     textAlign = TextAlign.Center,
+    //     text = selectedChannel.getMembersStatusText(LocalContext.current, currentUser),
+    //     style = ChatTheme.typography.footnoteBold,
+    //     color = ChatTheme.colors.textLowEmphasis,
+    // )
+    //
+    // ChannelMembers(membersToDisplay)
 }
 
 /**

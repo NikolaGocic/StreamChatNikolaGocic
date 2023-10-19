@@ -17,6 +17,7 @@
 package io.getstream.chat.android.compose.ui.messages.composer
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -72,6 +73,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import androidx.core.app.ActivityCompat
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.getstream.chat.android.client.errors.extractCause
@@ -194,6 +196,8 @@ public fun MessageComposer(
         DefaultMessageComposerAudioRecordingContent(it)
     },
     trailingContent: @Composable (MessageComposerState) -> Unit = {
+        val context = LocalContext.current
+
         CustomMessageComposerTrailingContent(
             onSmileyCLick = {},
             value = it.inputValue,
@@ -209,6 +213,28 @@ public fun MessageComposer(
             },
             onRecordingSaved = onRecordingSaved,
             statefulStreamMediaRecorder = statefulStreamMediaRecorder,
+            shareLocation = {
+                viewModel.getFusedLocationClient()?.let{ locationCLient->
+                    if (!(ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                    )) {
+                        locationCLient.lastLocation.addOnSuccessListener { location ->
+                            val message = viewModel.buildShareLocationMessage(
+                                location.latitude,
+                                location.longitude
+                            )
+                            onSendMessage(message)
+                        }
+                    }
+
+                }
+
+            }
         )
     },
 ) {

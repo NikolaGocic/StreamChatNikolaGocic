@@ -61,13 +61,13 @@ internal fun MessagesScrollingOption(
                 .size(48.dp),
             shape = CircleShape,
             elevation = 4.dp,
-            color = ChatTheme.colors.barsBackground,
+            color = Color.White,
         ) {
             Icon(
                 modifier = Modifier.padding(16.dp),
                 painter = painterResource(R.drawable.stream_compose_ic_arrow_down),
                 contentDescription = null,
-                tint = ChatTheme.colors.primaryAccent,
+                tint = Color.Black,
             )
         }
 
